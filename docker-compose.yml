@@ -1,0 +1,29 @@
+version: '3'
+services:
+  api:
+    depends_on:
+      - mysql
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./src/api:/go/src/api
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: sample
+      MYSQL_USER: buzz
+      MYSQL_PASSWORD: --------
+      MYSQL_ROOT_PASSWORD: --------
+      TZ: Asia/Tokyo
+    hostname: hoge
+    ports: 
+      - "3306:3306"
+    volumes:
+      - ./docker/db/conf.d:/etc/mysql/conf.d
+      - mysql-data:/var/lib/mysql
+volumes:
+  mysql-data:
