@@ -4,6 +4,7 @@ import (
 	"github.com/rikimaru-tokyo/gin_sqlx_lesson01/myDatabase"
 )
 
+//データの受け手となる構造体を宣言
 type MembersResult struct {
 	MemberID   int     `db:"member_id"`
 	MemberName string  `db:"member_name"`
