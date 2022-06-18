@@ -3,30 +3,32 @@ services:
   api:
     depends_on:
       - mysql
-    build:
+    build: 
       context: .
       dockerfile: ./docker/api/Dockerfile
     ports:
       - "8080:8080"
     volumes:
-      - ./src/api:/go/src/api
+      - .:/go/src/
+    env_file:
+      - ./docker/mysql/mysql.env
     tty: 
       true
   mysql:
-    image: mysql:5.7
+    build: 
+      context: .
+      dockerfile: ./docker/mysql/Dockerfile
     restart: always
-    environment:
-      MYSQL_DATABASE: sample
-      MYSQL_USER: buzz
-      MYSQL_PASSWORD: --------
-      MYSQL_ROOT_PASSWORD: --------
-      TZ: Asia/Tokyo
-    hostname: hoge
+    env_file:
+      - ./docker/mysql/mysql.env
     ports: 
       - "3306:3306"
+    tty: 
+      true
     volumes:
-      - ./docker/db/conf.d:/etc/mysql/conf.d
-      - ./docker/db/entrypoint:/docker-entrypoint-initdb.d
+      - ./docker/mysql/entrypoint:/docker-entrypoint-initdb.d
       - mysql-data:/var/lib/mysql
+      - ./mysql-files:/var/lib/mysql-files #<- https://github.com/docker-library/mysql/issues/541
 volumes:
   mysql-data:
+
